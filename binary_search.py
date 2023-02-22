@@ -45,7 +45,7 @@ def find_smallest_positive(xs):
         if xs[mid] == 1:
             return mid
         return go(left, right)
-    return go(0, len(xs) -1)
+    return go(0, len(xs) - 1)
 
 
 def count_repeats(xs, x):
@@ -71,7 +71,41 @@ def count_repeats(xs, x):
     7
     >>> count_repeats([3, 2, 1], 4)
     0
-    '''
+   '''
+   
+    if len(xs) == 0:
+        return 0
+
+    def lower_bin(left, right):
+        if right == left:
+            if xs[right] < x:
+                return right
+            else:
+                return len(xs)
+        mid = (left + right) // 2
+        if xs[mid] >= x:
+            left = mid + 1
+        if xs[mid] < x:
+            right = mid
+        return lower_bin(left, right)
+
+    def higher_bin(left, right):
+        if right == left:
+            if right == len(xs) - 1 and xs[right] > x:
+                return len(xs)
+            if xs[right] >= x:
+                return right
+            else:
+                return 0
+        mid = (left + right) // 2
+        if xs[mid] > x:
+            left = mid + 1
+        if xs[mid] <= x:
+            right = mid
+        return higher_bin(left, right)
+
+    return lower_bin(0, len(xs) - 1) - higher_bin(0, len(xs) - 1)
+
 
 
 def argmin(f, lo, hi, epsilon=1e-3):
@@ -90,15 +124,18 @@ def argmin(f, lo, hi, epsilon=1e-3):
                you recursively call your function on the interval [lo,m2] or [m1,hi]
 
     APPLICATION:
-    Essentially all data mining algorithms are just this argmin implementation in disguise.
+    Essentially all data mining algorithms are just this argmin implementation
+    in disguise.
     If you go on to take the data mining class (CS145/MATH166),
-    we will spend a lot of time talking about different f functions that can be minimized and their applications.
+    we will spend a lot of time talking about different f functions
+    that can be minimized and their applications.
     But the actual minimization code will all be a variant of this binary search.
 
     WARNING:
     The doctests below are not intended to pass on your code,
     and are only given so that you have an example of what the output should look like.
-    Your output numbers are likely to be slightly different due to minor implementation details.
+    Your output numbers are likely to be slightly different due to minor
+    implementation details.
     Writing tests for code that uses floating point numbers is notoriously difficult.
     See the pytests for correct examples.
 
@@ -107,6 +144,17 @@ def argmin(f, lo, hi, epsilon=1e-3):
     >>> argmin(lambda x: (x-5)**2, -20, 0)
     -0.00016935087808430278
     '''
+    def go(left, right):
+        if right - left < epsilon:
+            return right
+        lam1 = (2 * left + right) / 3
+        lam2 = (left + 2 * right) / 3
+        im = [f(left), f(lam1), f(lam2), f(right)]
+        if f(left) == min(im) or f(lam1) == min(im):
+            return go(left, lam2)
+        if f(lam2) == min(im) or f(right) == min(im):
+            return go(lam1, right)
+    return go(lo, hi)
 
 
 ################################################################################
@@ -129,6 +177,15 @@ def find_boundaries(f):
     else:
         you're done; return lo,hi
     '''
+    def go(left, right):
+        mid = (left + right) / 2
+        if f(left) < f(mid):
+            return go(2 * left, right)
+        elif f(right) < f(mid):
+            return go(left, 2 * right)
+        else:
+            return (left, right)
+    return go(-1, 1)
 
 
 def argmin_simple(f, epsilon=1e-3):
