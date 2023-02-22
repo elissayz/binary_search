@@ -1,10 +1,12 @@
 #!/bin/python3
 '''
-JOKE: There are 2 hard problems in computer science: cache invalidation, naming things, and off-by-1 errors.
+JOKE: There are 2 hard problems in computer science:
+cache invalidation, naming things, and off-by-1 errors.
 
 It's really easy to have off-by-1 errors in these problems.
 Pay very close attention to your list indexes and your < vs <= operators.
 '''
+
 
 def find_smallest_positive(xs):
     '''
@@ -12,7 +14,7 @@ def find_smallest_positive(xs):
     Find the index of the smallest positive number.
     If no such index exists, return `None`.
 
-    HINT: 
+    HINT
     This is essentially the binary search algorithm from class,
     but you're always searching for 0.
 
@@ -27,10 +29,9 @@ def find_smallest_positive(xs):
     True
     '''
 
-    mid = len(xs) // 2
-
     if len(xs) == 0:
         return None
+
     def go(left, right):
         if left == right:
             if xs[left] > 0:
@@ -54,7 +55,7 @@ def count_repeats(xs, x):
     and that x is a number.
     Calculate the number of times that x occurs in xs.
 
-    HINT: 
+    HINT
     Use the following three step procedure:
         1) use binary search to find the lowest index with a value >= x
         2) use binary search to find the lowest index with a value < x
@@ -72,7 +73,7 @@ def count_repeats(xs, x):
     >>> count_repeats([3, 2, 1], 4)
     0
    '''
-   
+
     if len(xs) == 0:
         return 0
 
@@ -107,21 +108,24 @@ def count_repeats(xs, x):
     return lower_bin(0, len(xs) - 1) - higher_bin(0, len(xs) - 1)
 
 
-
 def argmin(f, lo, hi, epsilon=1e-3):
     '''
-    Assumes that f is an input function that takes a float as input and returns a float with a unique global minimum,
+    Assumes that f is an input function that takes a
+    float as input and returns a float with a unique global minimum,
     and that lo and hi are both floats satisfying lo < hi.
-    Returns a number that is within epsilon of the value that minimizes f(x) over the interval [lo,hi]
+    Returns a number that is within epsilon of the value that
+    minimizes f(x) over the interval [lo,hi]
 
-    HINT:
+    HINT
     The basic algorithm is:
         1) The base case is when hi-lo < epsilon
         2) For each recursive call:
-            a) select two points m1 and m2 that are between lo and hi
+            a) select two points m1 and m2 that are
+            between lo and hi
             b) one of the 4 points (lo,m1,m2,hi) must be the smallest;
-               depending on which one is the smallest, 
-               you recursively call your function on the interval [lo,m2] or [m1,hi]
+               depending on which one is the smallest
+               you recursively call your function on
+               the interval [lo,m2] or [m1,hi]
 
     APPLICATION:
     Essentially all data mining algorithms are just this argmin implementation
@@ -129,14 +133,17 @@ def argmin(f, lo, hi, epsilon=1e-3):
     If you go on to take the data mining class (CS145/MATH166),
     we will spend a lot of time talking about different f functions
     that can be minimized and their applications.
-    But the actual minimization code will all be a variant of this binary search.
+    But the actual minimization code will all be
+    a variant of this binary search.
 
     WARNING:
     The doctests below are not intended to pass on your code,
-    and are only given so that you have an example of what the output should look like.
+    and are only given so that you have an example of what the output
+    should look like.
     Your output numbers are likely to be slightly different due to minor
     implementation details.
-    Writing tests for code that uses floating point numbers is notoriously difficult.
+    Writing tests for code that uses floating point numbers is notoriously
+    difficult.
     See the pytests for correct examples.
 
     >>> argmin(lambda x: (x-5)**2, -20, 20)
@@ -157,14 +164,15 @@ def argmin(f, lo, hi, epsilon=1e-3):
     return go(lo, hi)
 
 
-################################################################################
+#############################################################################
 # the functions below are extra credit
-################################################################################
+#############################################################################
 
 def find_boundaries(f):
     '''
     Returns a tuple (lo,hi).
-    If f is a convex function, then the minimum is guaranteed to be between lo and hi.
+    If f is a convex function, then the minimum is guaranteed
+    to be between lo and hi.
     This function is useful for initializing argmin.
 
     HINT:
@@ -190,7 +198,8 @@ def find_boundaries(f):
 
 def argmin_simple(f, epsilon=1e-3):
     '''
-    This function is like argmin, but it internally uses the find_boundaries function so that
+    This function is like argmin,
+    but it internally uses the find_boundaries function so that
     you do not need to specify lo and hi.
 
     NOTE:
